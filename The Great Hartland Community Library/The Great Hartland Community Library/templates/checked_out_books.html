@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Checked-out Books</h2>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Book Title</th>
+            <th>Student Name</th>
+            <th>Checkout Date</th>
+            <th>Expected Check-in Date</th>
+            <th>Check-in Date</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for checkout in checkouts %}
+        <tr>
+            <td>{{ checkout['book_title'] }}</td>
+            <td>{{ checkout['user_name'] }}</td>
+            <td>{{ checkout['checkout_date'] }}</td>
+            <td>{{ checkout['expected_checkin_date'] }}</td>
+            <td>{{ checkout['actual_checkin_date'] if checkout['actual_checkin_date'] else 'Not Returned Yet' }}</td>
+            <td>
+                {% if not checkout['actual_checkin_date'] %}
+                <form action="{{ url_for('checkin_book', checkout_id=checkout['id']) }}" method="POST" style="display:inline;">
+                    <button type="submit" class="btn btn-success btn-sm">Check In</button>
+                </form>
+                {% else %}
+                <span class="text-muted">Already Returned</span>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

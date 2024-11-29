@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Book List</h2>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Year</th>
+            <th>ISBN</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for book in books %}
+        <tr>
+            <td>{{ book['id'] }}</td>
+            <td>{{ book['title'] }}</td>
+            <td>{{ book['author'] }}</td>
+            <td>{{ book['year'] }}</td>
+            <td>{{ book['isbn'] }}</td>
+            <td>{{ book['status'] }}</td>
+            <td>
+                {% if book['status'] == 'checked out' %}
+                <form action="{{ url_for('change_book_status', book_id=book['id'], status='available') }}" method="POST" style="display:inline;">
+                    <button type="submit" class="btn btn-success btn-sm">Mark as Available</button>
+                </form>
+                {% else %}
+                <form action="{{ url_for('change_book_status', book_id=book['id'], status='checked out') }}" method="POST" style="display:inline;">
+                    <button type="submit" class="btn btn-danger btn-sm">Mark as Checked Out</button>
+                </form>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
